@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http'; // Importer HttpHeaders
 import { Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FooterComponent } from '@app/constantes/footer/footer.component';
 import { ReactiveFormsModule } from '@angular/forms'; // <-- Importer ReactiveFormsModule
-
 import { HeaderComponent } from '@app/constantes/header/header.component';
 
 @Component({
   standalone: true,
   selector: 'app-dashboard-drc',
-  imports: [CommonModule, RouterLink, HeaderComponent, FooterComponent,    ReactiveFormsModule ],
+  imports: [CommonModule, RouterLink, HeaderComponent, FooterComponent, ReactiveFormsModule],
   templateUrl: './dashboard-drc.component.html',
   styleUrls: ['./dashboard-drc.component.css']
 })
@@ -66,9 +65,29 @@ export class DashboardDrcComponent implements OnInit {
     }
 
     const userData = this.userForm.value;
+    const currentUser = localStorage.getItem('currentUser');
+    const token = currentUser ? JSON.parse(currentUser).token : null;
+    console.log("Token récupéré :", token);
 
-    // Envoyer les données au backend
-    this.http.post('http://localhost:8080/api/drc/utilisateurs', userData).subscribe({
+    
+
+    // Vérifier si le token existe
+    if (!token) {
+      this.message = 'Token JWT manquant. Veuillez vous reconnecter.';
+      this.isSuccess = false;
+      return;
+    }
+    
+    
+    
+
+    // Ajouter l'en-tête Authorization avec le token
+    const headers = new HttpHeaders({
+      'Authorization': 'Bearer ' + token
+    });
+
+    // Envoyer les données au backend avec l'en-tête
+    this.http.post('http://localhost:8080/api/drc/utilisateurs', userData, { headers }).subscribe({
       next: (response) => {
         this.message = 'Utilisateur créé avec succès !';
         this.isSuccess = true;
