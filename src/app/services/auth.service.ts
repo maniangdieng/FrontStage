@@ -14,12 +14,13 @@ export class AuthService {
 
   // Méthode pour se connecter
   login(email: string, password: string) {
-    return this.http.post<{ token: string; role: string }>(this.loginUrl, { email, password }).pipe(
+    return this.http.post<{ token: string; role: string; email: string }>(this.loginUrl, { email, password }).pipe(
       map((response) => {
         if (response.token) {
           localStorage.setItem('currentUser', JSON.stringify({
             token: response.token,
-            role: response.role
+            role: response.role,
+            email: response.email,
           }));
         }
         return response;
@@ -37,7 +38,7 @@ export class AuthService {
       'ENSEIGNANT': '/dashboard-per',
       'DRC': '/dashboard-drc',
       'DRH': '/dashboard-drh',
-      'DFC': '/dashboard-dfc'
+      'DFC': '/dashboard-dfc',
     };
     this.router.navigate([roleRoutes[role] || '/login']); // Redirection par défaut si rôle inconnu
   }
@@ -57,6 +58,12 @@ export class AuthService {
   getCurrentUserRole(): string {
     const currentUser = localStorage.getItem('currentUser');
     return currentUser ? JSON.parse(currentUser).role : '';
+  }
+
+  // Obtenir l'email de l'utilisateur connecté
+  getCurrentUserEmail(): string {
+    const currentUser = localStorage.getItem('currentUser');
+    return currentUser ? JSON.parse(currentUser).email : '';
   }
 
   // Obtenir le token JWT

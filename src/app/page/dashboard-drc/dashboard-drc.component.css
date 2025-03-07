@@ -21,3 +21,18 @@
 .content-section {
     display: none;
   }
+
+
+  .content-section {
+    display: none;
+}
+
+.content-section.active {
+    display: block;
+}
+
+.list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}  

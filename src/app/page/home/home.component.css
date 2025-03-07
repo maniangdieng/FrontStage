@@ -164,6 +164,7 @@ main{
     border-radius: 10px;
     border: 1px;
     border: 2px solid rgb(231, 229, 229);
+    height: auto;
 }
 .main-image2 {
     max-width: 70%;
@@ -173,6 +174,7 @@ main{
     border-radius: 10px;
     border: 1px;
     border: 2px solid rgb(231, 229, 229);
+    height: auto;
 }
 
 
@@ -261,3 +263,5 @@ main{
     border: 2px solid #343435; /* Change la couleur de la bordure */
     transition: all 0.3s ease; /* Ajoute une transition douce */
 }
+
+
